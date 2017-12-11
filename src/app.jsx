@@ -3,6 +3,7 @@ import React, { Component } from "react";
 export default class App extends Component {
   constructor(props) {
     super(props);
+    // the states that will be used
     this.state = {
       Due: "",
       Received: "",
@@ -18,31 +19,42 @@ export default class App extends Component {
       bad: "alert alert-danger hidden",
       change: 0,
     }
+    // the functions that are being used
     this.handleDueChange = this.handleDueChange.bind(this);
     this.handleReceivedChange = this.handleReceivedChange.bind(this);
     this.totalChange = this.totalChange.bind(this);
   }
-
+// event that will get the value of the input in due
   handleDueChange(e) {
     this.setState({ Due: e.target.value })
   }
-
+// event that will get the value of the input in Received
   handleReceivedChange(e) {
     this.setState({ Received: e.target.value })
   }
 
+// the calculationg stage 
   totalChange(e) {
+    // change will be Received x 100 - Due * 100
+    //(the x 100 is for javascript math glitch)
+    // Math.round will help get whole numbers
     var change =
       Math.round((this.state.Received * 100) - (this.state.Due * 100));
+// the states and the calculations to get the amount of each needed in the final change
     let twenties = (change - (change % 2000)) / 2000;
     let tens =     (change - (change % 1000) - (twenties * 2000)) / 1000;
     let fives =    (change - (change % 500)  - (tens * 1000)    - (twenties * 2000)) / 500;
     let ones =     (change - (change % 100)  - (fives * 500)    - (tens * 1000)   - (twenties * 2000)) / 100;
     let quarters = (change - (change % 25)   - (ones * 100)     - (fives * 500)   - (tens * 1000)   - (twenties * 2000)) / 25;
+    // in change lower than quarters but higher then pennies after  the amount was calcualated 
+    // the coin had to then get recalcualted the coin minus the coin modualted by it value and divided by its value
+    // but only after the first iteration of calcualtion was done not befor
     let dimes =    (change    - (quarters * 25)  - (ones * 100)    - (fives * 500)   - (tens * 1000) - (twenties * 2000));
     dimes = (dimes - (dimes % 10)) / 10 ;
     let nickels =  (change    - (dimes * 10)     - (quarters * 25) - (ones * 100)    - (fives * 500) - (tens * 1000) - (twenties * 2000)) 
     nickels = (nickels - (nickels % 5)) / 5
+    // the pennies only needs one iteration of calcualtions  it dose no need the secon iteration becouse
+    // there is no more to divid by after wards
     let pennies =  (change    - (nickels * 5)    - (dimes * 10)    - (quarters * 25) - (ones * 100)  - (fives * 500) - (tens * 1000) - (twenties * 2000)) 
     
     let good = "alert alert-success"
